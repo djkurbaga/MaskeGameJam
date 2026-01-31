@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    private Animator animator;
+
     [Header("Movement Settings")]
     public float moveSpeed = 5f;
     public float jumpForce = 10f; // Zıplama gücü
@@ -18,39 +20,48 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         rb.freezeRotation = true;
     }
 
     void Update()
     {
-        // 1. Yatay Hareket Girişi (A ve D)
+        if (GameManager.Instance.CurrentState != GameState.Gameplay)
+            return;
         if (Keyboard.current != null)
         {
             float left = Keyboard.current.aKey.isPressed ? -1 : 0;
             float right = Keyboard.current.dKey.isPressed ? 1 : 0;
             moveInput = left + right;
 
-            // 2. Zıplama Girişi (Space)
-            // Sadece yerdeyken zıplamaya izin veriyoruz
             if (Keyboard.current.spaceKey.wasPressedThisFrame && isGrounded)
             {
                 Jump();
             }
         }
 
-        // Karakteri Çevirme
         if (moveInput > 0) transform.localScale = new Vector3(1, 1, 1);
         else if (moveInput < 0) transform.localScale = new Vector3(-1, 1, 1);
     }
 
     void FixedUpdate()
     {
-        // 3. Yerde miyiz kontrolü?
+        if(GameManager.Instance.CurrentState != GameState.Gameplay)
+        {
+            if (rb.linearVelocity.x != 0)
+            {
+                animator.SetBool("isWalking", true);
+            }
+            else
+            {
+                animator.SetBool("isWalking", false);
+            }
+            return;
+        }
         isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, checkRadius, groundLayer);
-
-        // Yatay Hareket Uygulama
         rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+           
     }
 
     void Jump()

@@ -15,10 +15,9 @@ public class InteractionManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && canInteract)
+        if (Input.GetMouseButtonDown(0) && canInteract && GameManager.Instance.CurrentState == GameState.Gameplay)
         {
             if (EventSystem.current.IsPointerOverGameObject()) return;
-
             DetectObject();
         }
     }
