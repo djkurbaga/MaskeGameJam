@@ -47,21 +47,20 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(GameManager.Instance.CurrentState != GameState.Gameplay)
+        if (rb.linearVelocity.x != 0)
         {
-            if (rb.linearVelocity.x != 0)
-            {
-                animator.SetBool("isWalking", true);
-            }
-            else
-            {
-                animator.SetBool("isWalking", false);
-            }
+            animator.SetBool("isWalking", true);
+        }
+        else
+        {
+            animator.SetBool("isWalking", false);
+        }
+        if (GameManager.Instance.CurrentState != GameState.Gameplay)
+        {
             return;
         }
         isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, checkRadius, groundLayer);
         rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
-           
     }
 
     void Jump()
