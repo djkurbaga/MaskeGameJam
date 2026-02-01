@@ -65,10 +65,8 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    // itemPool'daki index'e veya isme göre eþya ekle
     public void AddItem(string itemName)
     {
-        // 1. Ýsimden itemi bul
         InventoryItem itemToAdd = itemPool.Find(x => x.itemName == itemName);
 
         if (itemToAdd == null)
@@ -77,7 +75,6 @@ public class InventoryManager : MonoBehaviour
             return;
         }
 
-        // 2. Ýlk boþ slotu bul ve yerleþtir
         foreach (var slot in slots)
         {
             if (slot.IsEmpty())
@@ -91,7 +88,6 @@ public class InventoryManager : MonoBehaviour
         Debug.Log("Envanter DOLU!");
     }
 
-    // Slotlardan birine týklandýðýnda çalýþýr
     public void OnSlotClicked(int index)
     {
         DeselectAll();
@@ -106,7 +102,6 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    // Seçili eþyayý kullanma (ActionManager veya GameManager çaðýrabilir)
     public void UseSelectedItem()
     {
         if (selectedSlot != null && !selectedSlot.IsEmpty())
@@ -120,7 +115,6 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    // Belirli bir eþyaya sahip miyiz? (Mektup okuma kontrolü vb.)
     public bool HasItem(string itemName)
     {
         foreach (var slot in slots)
